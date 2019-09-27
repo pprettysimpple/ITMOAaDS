@@ -1,0 +1,122 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{mathtools}
+\usepackage{verbatim}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{xcolor}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+\begin{document}
+
+\begin{enumerate}
+\item
+\begin{enumerate}
+	\itemИстинное время работы increment в худшем случае составит k операций\\
+	Это значение достигается когда массив а заполнен единицами.\\
+
+	\itemПосмотрим сколько раз мы затрагивали бит с номером i.\\
+	Первый бит меняется каждую операцию, второй бит - каждую вторую.
+	Нетрудно заметить что i бит меняет значение только после $2^{i-1}$ операций increment.
+	Нулевой бит инвертируется при каждом вызове $\operatorname{increment}$\\
+	Итого получаем $n + \frac{n}{2} + \frac{n}{4} + ... + 1 < 2n$\\
+
+	\itemРассмотрим массив в котором на $k-1$ месте стоит единица, а остальные значения - нули.\\
+	Будем чередуя выполнять операции decrement и increment.\\
+	Нетрудно заметить что каждая будет выполняться за k простых операций.\\
+	Следовательно время работы в худшем случае --- $\mathcal{O}(nk)$.\\
+
+	\item Заведём дополнительную переменную $\operatorname{right}$, изначально равную $-1$, --- самая правая единичка. После неё в массиве может храниться что угодно, но мы будем считать что там лежат нули.
+	\begin{enumerate}
+		\itemКогда цикл в $\operatorname{increment}$ дойдет до $   \operatorname{right} + 1$ мы должны остановиться так как помним о том что все элементы после $\operatorname{right}$ равны нулю.\\ Ещё нужно подвинуть $\operatorname{right}$ в случае когда $i > \operatorname{right}$
+		\item$\operatorname{get(i)}$ нужно изменить так что-бы при $i > operatorname{right}$ она возвращала $0$.
+		\itemТеперь $\operatorname{setZero}$ будет просто ствить   $\operatorname{right}$ в значение $-1$
+	\end{enumerate}
+	\begin{lstlisting}[language=Python]
+	increment():
+		i = 0
+		while i < k and i <= right and a[i] = 1:
+			a[i] = 0
+			i++
+		right = max(right, i)
+		if i < k:
+			a[i] = 1
+
+	get(i):
+		if i > r:
+			return 0; 
+		return a[i]
+
+	setZero():
+		r = -1
+	\end{lstlisting}
+\end{enumerate}
+
+\item
+\begin{enumerate}
+	Придумаем функцию потенциала:\\
+	$n$ "--- количество элементов в векторе\\
+	$c$ "--- фактический размер вектора \\
+	$\frac{c}{4} \leq n \leq c$\\
+	$\Phi(n, c) = \begin{cases}
+		c \leq 2n, 2n - c,\\
+		2n < c, 2c - n.
+	\end{cases}$\\
+	$\operatorname{push} = \begin{cases}
+		c \leq 2n, \medspace 1 + \Phi(n + 1, c) - \Phi(n, c) = \mathcal{O}(1),\\
+		2n < c, \medspace 1 + \Phi(n + 1, c) - \Phi(n, c) = \mathcal{O}(1),\\
+		n = c, \medspace n + \Phi(n + 1, 2c) - \Phi(n, c) =\\
+		= n + 2n + 2 - 2c - 2n + c = 3 + n - c = \mathcal{O}(1).\\
+	\end{cases}$\\
+	$\operatorname{pop} = \begin{cases}
+		c \leq 2n, \medspace 1 + \Phi(n + 1, c) - \Phi(n, c) = \mathcal{O}(1),\\
+		2n < c, \medspace 1 + \Phi(n + 1, c) - \Phi(n, c) = \mathcal{O}(1),\\
+		n = \frac{c}{4}, \medspace c + \Phi(n - 1, \frac{c}{2}) - \Phi(n, c) =\\
+		= c + c - n + 1 - 2c + n = 1 = \mathcal{O}(1).\\
+	\end{cases} \Rightarrow \\ \Rightarrow$ все операции выполняются в среднем за $\mathcal{O}(1)$ 
+\end{enumerate}
+
+\item
+\begin{enumerate}
+
+\end{enumerate}
+
+\item
+\begin{enumerate}
+	Будем внутри нашей памяти хранить односвязный список не занятых блоков. Заведём указатель $\operatorname{head}$ на последний элемент списка. В вершине списка будем хранить одно число "--- указатель на предыдущий элемент, или $-1$, если элемент является последним.\\Пусть для нас память представляет собой массив $a$ длины $n$. Проинициализируем её так:\\$\forall i \in \{0, 1, \medspace \ldots, n - 1\}, \medspace a_i = i - 1$\\
+	$\operatorname{head} = n - 1$
+\end{enumerate}
+
+\item
+\begin{enumerate}
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
