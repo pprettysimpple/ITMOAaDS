@@ -78,7 +78,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/kirill/Work/AaDS/lab2/main.c">
+		<Unit filename="/home/kirill/Work/AaDS/lab2/A.c">
 			<Option target="lab2"/>
 		</Unit>
 		<Unit filename="/home/kirill/Work/AaDS/lab2/CMakeLists.txt">
