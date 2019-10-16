@@ -1,4 +1,8 @@
-#Allow
+#Ignore all
+/*/*
+
+#Except this
 !/*.c
 !/*.cpp
 !/*.tex
+!/*.pdf
