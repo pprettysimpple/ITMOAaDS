@@ -1,4 +1,4 @@
 #Allow
-!*.c
-!*.cpp
-!*.tex
+!/*.c
+!/*.cpp
+!/*.tex
