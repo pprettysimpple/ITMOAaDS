@@ -1,0 +1,4 @@
+#Allow
+!*.c
+!*.cpp
+!*.tex
